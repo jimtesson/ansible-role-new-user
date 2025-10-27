@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  privileged: true 
+  provider:
+    name: libvirt
+    type: libvirt
+    options:
+      memory: 192
+      cpus: 2
+platforms:
+  - name: testServer01
+    box: debian/bookworm64
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
+lint: |
+  yaml-lint

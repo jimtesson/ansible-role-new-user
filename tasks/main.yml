@@ -1,0 +1,35 @@
+- name: Install sudo
+  ansible.builtin.package:
+    name: "sudo"
+    state: present
+
+- name: Ensure each group exists
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ host_users | selectattr('groups', 'defined') | map(attribute='groups') | flatten | unique | list }}"
+
+- name: Create a new user
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    home: "{{ item.home | default(omit) }}"
+    createhome: true
+    groups: "{{ item.groups | default([]) | join(',') }}"
+    shell: /bin/bash
+    state: present
+    password: "{{ item.pwd | password_hash('sha512') }}"
+    update_password: on_create
+  loop: "{{ host_users }}"
+  when: item.name is defined
+  no_log: true
+
+
+- name: Add authorized keys
+  ansible.posix.authorized_key:
+    user: "{{ item.0.name }}"
+    state: present
+    key: "{{ item.1 }}"
+  loop: "{{ query('subelements', host_users, 'authorized_keys', skip_missing=True) }}"
+  when: item.name is defined
+  no_log: true
+

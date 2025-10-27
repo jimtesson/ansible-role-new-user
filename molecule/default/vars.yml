@@ -1,0 +1,13 @@
+host_users:
+  - name: ansible
+    pwd: "changeMe"
+    authorized_keys:
+      - "ssh-ed25519 AAAA ansible"
+    groups:
+      - sudo
+      - dev
+
+  - name: foo
+    pwd: "changeMe"
+    authorized_keys:
+      - "ssh-ed25519 BBBB foo"

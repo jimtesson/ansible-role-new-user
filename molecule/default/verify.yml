@@ -1,0 +1,37 @@
+- name: Verify
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Load vars
+      ansible.builtin.include_vars:
+        file: vars.yml
+    # check user exists
+    - name: User exist
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        state: present
+      loop: "{{ host_users }}"
+      check_mode: true
+      register: user_exist
+      failed_when: user_exist is changed or user_exist is failed
+
+    - name: Ensure the target groups exist
+      ansible.builtin.group:
+        name: "{{ item }}"
+        state: present
+      check_mode: true
+      loop: "{{ host_users | selectattr('groups', 'defined') | map(attribute='groups') | flatten | unique | list }}"
+      register: group_exists
+      failed_when: group_exists is changed or group_exists is failed
+
+    - name: Create a new user
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        groups: "{{ item.groups | default([]) | join(',') }}"
+        state: present
+      loop: "{{ host_users }}"
+      when: item.name is defined
+      register: user_is_in_group
+      failed_when: user_is_in_group is changed or user_is_in_group is failed
+      check_mode: true

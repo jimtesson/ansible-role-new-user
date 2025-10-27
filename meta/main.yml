@@ -1,0 +1,16 @@
+galaxy_info:
+  author: jim
+  description: setup new user
+  role_name: new_user
+  namespace: jimtesson
+  company: none
+  license: MLP2
+  min_ansible_version: "2.11"
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+  galaxy_tags:
+    - users
+dependencies: []
