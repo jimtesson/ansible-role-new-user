@@ -9,16 +9,17 @@ Setup requirements
   pip install -r requirements.txt
 ```
 
-Role Name
+New user setup
 =========
 
-Add new user.
+Add new user, groups, specify authorized ssh keys, home directory.
 
 Role Variables
 --------------
 
 You must specify the new user(s) details (name, pwd, authorized ssh key, groups).
 
+```
   host_users:
     - name: ansible
       pwd: "changeMe"
@@ -27,7 +28,30 @@ You must specify the new user(s) details (name, pwd, authorized ssh key, groups)
       groups:
         - sudo
         - dev
+      home: "/srv/www"
+```
 
+Example
+----------------
+
+```
+  - hosts: webservers
+    tasks:
+      - name: "Include new user role"
+        ansible.builtin.include_role:
+          name: "jimtesson.new_user"
+          vars:
+            host_users:
+              - name: ansible
+                pwd: "changeMe"
+                authorized_keys:
+                  - "ssh-ed25519 AAAA ansible"
+                groups:
+                  - sudo
+                  - dev
+                home: "/srv/dev"
+
+```
  
 Tests
 ----------------

@@ -6,6 +6,7 @@ host_users:
     groups:
       - sudo
       - dev
+    home: "/srv/dev"
 
   - name: foo
     pwd: "changeMe"

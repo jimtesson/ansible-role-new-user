@@ -32,4 +32,3 @@
   loop: "{{ query('subelements', host_users, 'authorized_keys', skip_missing=True) }}"
   when: item.name is defined
   no_log: true
-
