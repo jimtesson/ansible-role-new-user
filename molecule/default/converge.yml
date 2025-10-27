@@ -3,6 +3,9 @@
   hosts: all
   become: true
   tasks:
+    - name: Load vars
+      ansible.builtin.include_vars:
+        file: vars.yml
     - name: "Include current role"
       ansible.builtin.include_role:
         name: "jimtesson.new_user"

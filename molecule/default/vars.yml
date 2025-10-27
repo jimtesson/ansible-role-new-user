@@ -1,5 +1,5 @@
 host_users:
-  - name: ansible
+  - name: foo
     pwd: "changeMe"
     authorized_keys:
       - "ssh-ed25519 AAAA ansible"
@@ -7,7 +7,7 @@ host_users:
       - sudo
       - dev
 
-  - name: foo
+  - name: baz
     pwd: "changeMe"
     authorized_keys:
       - "ssh-ed25519 BBBB foo"
