@@ -17,19 +17,19 @@ Add new user, groups, specify authorized ssh keys, home directory.
 Role Variables
 --------------
 
-You must specify the new user(s) details (name, pwd, authorized ssh key, groups).
+You must specify the `host_users` details:
 
-```
-  host_users:
-    - name: ansible
-      pwd: "changeMe"
-      authorized_keys:
-        - "ssh-ed25519 AAAA ansible"
-      groups:
-        - sudo
-        - dev
-      home: "/srv/www"
-```
+  - mandatory:
+    - name: user name
+    - pwd: user password
+
+  - options:
+    - authorized_keys: ssh keys in .ssh/authorized_keys
+    - groups: groups user belong to
+    - home: custom home directory path
+
+You can specify `no_log: true` to reveal ssh keys, password... by default it is hidden
+
 
 Example
 ----------------
@@ -50,6 +50,7 @@ Example
                   - sudo
                   - dev
                 home: "/srv/dev"
+  - no_log: true
 
 ```
  
