@@ -1,4 +1,2 @@
 host_users: []
-no_log: true
-
-
+hide_sensitive_data: true

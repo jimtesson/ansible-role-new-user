@@ -1,4 +1,4 @@
-no_log: false
+hide_sensitive_data: false
 host_users:
   - name: foo
     pwd: "changeMe"
