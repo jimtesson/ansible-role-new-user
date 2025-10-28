@@ -14,3 +14,6 @@ host_users:
     authorized_keys:
       - "ssh-ed25519 BBBB foo"
       - "ssh-ed25519 CCCC foo"
+
+  - name: yuu
+    pwd: ""

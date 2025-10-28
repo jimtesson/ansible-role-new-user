@@ -38,7 +38,8 @@
         path: "{{ [item.0.home | default('/home/' ~ item.0.name), '.ssh', 'authorized_keys'] | path_join }}"
         line: "{{ item.1 }}"
         state: present
-      loop: "{{ query('subelements', host_users, 'authorized_keys', skip_missing=True) }}"
+      loop: "{{ query('subelements', host_users | selectattr('authorized_keys', 'defined') | list, 'authorized_keys') }}"
+      when: item.0.name is defined and (item.1 is defined and item.1 | trim != '')
       check_mode: true
       register: authorized_keys_check
       ignore_errors: true

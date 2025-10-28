@@ -29,6 +29,6 @@
     user: "{{ item.0.name }}"
     state: present
     key: "{{ item.1 }}"
-  loop: "{{ query('subelements', host_users, 'authorized_keys', skip_missing=True) }}"
-  when: item.0.name is defined and item.1 != ''
+  loop: "{{ query('subelements', host_users | selectattr('authorized_keys', 'defined') | list, 'authorized_keys') }}"
+  when: item.0.name is defined and (item.1 is defined and item.1 | trim != '')
   no_log: "{{ hide_sensitive_data }}"
