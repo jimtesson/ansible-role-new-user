@@ -30,5 +30,5 @@
     state: present
     key: "{{ item.1 }}"
   loop: "{{ query('subelements', host_users, 'authorized_keys', skip_missing=True) }}"
-  when: item.0.name is defined
+  when: item.0.name is defined and item.1 != ''
   no_log: "{{ no_log }}"
