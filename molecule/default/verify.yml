@@ -6,15 +6,14 @@
     - name: Load vars
       ansible.builtin.include_vars:
         file: vars.yml
-    # check user exists
-    - name: User exist
+
+    - name: Check user exist
       ansible.builtin.user:
         name: "{{ item.name }}"
         state: present
       loop: "{{ host_users }}"
       check_mode: true
       register: user_exist
-      failed_when: user_exist is changed or user_exist is failed
 
     - name: Ensure the target groups exist
       ansible.builtin.group:
@@ -23,9 +22,8 @@
       check_mode: true
       loop: "{{ host_users | selectattr('groups', 'defined') | map(attribute='groups') | flatten | unique | list }}"
       register: group_exists
-      failed_when: group_exists is changed or group_exists is failed
 
-    - name: Create a new user
+    - name: Check user group
       ansible.builtin.user:
         name: "{{ item.name }}"
         groups: "{{ item.groups | default([]) | join(',') }}"
@@ -33,5 +31,25 @@
       loop: "{{ host_users }}"
       when: item.name is defined
       register: user_is_in_group
-      failed_when: user_is_in_group is changed or user_is_in_group is failed
       check_mode: true
+
+    - name: Check authorized keys
+      ansible.builtin.lineinfile:
+        path: "{{ [item.0.home | default('/home/' ~ item.0.name), '.ssh', 'authorized_keys'] | path_join }}"
+        line: "{{ item.1 }}"
+        state: present
+      loop: "{{ query('subelements', host_users, 'authorized_keys', skip_missing=True) }}"
+      check_mode: true
+      register: authorized_keys_check
+      ignore_errors: true
+
+    - name: Assert all
+      ansible.builtin.assert:
+        that:
+          - user_exist is not changed
+          - user_exist is not failed
+          - group_exists is not changed
+          - group_exists is not failed
+          - user_is_in_group is not changed
+          - user_is_in_group is not failed
+          - authorized_keys_check is not changed

@@ -1,3 +1,4 @@
+no_log: false
 host_users:
   - name: foo
     pwd: "changeMe"
@@ -9,5 +10,7 @@ host_users:
 
   - name: baz
     pwd: "changeMe"
+    home: "/srv/baz"
     authorized_keys:
       - "ssh-ed25519 BBBB foo"
+      - "ssh-ed25519 CCCC foo"

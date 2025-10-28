@@ -1,16 +1,4 @@
-host_users:
-  - name: ansible
-    pwd: "changeMe"
-    authorized_keys:
-      - "ssh-ed25519 AAAA ansible"
-    groups:
-      - sudo
-      - dev
-    home: "/srv/dev"
+host_users: []
+no_log: true
 
-  - name: foo
-    pwd: "changeMe"
-    authorized_keys:
-      - "ssh-ed25519 BBBB foo"
-      - "ssh-ed25519 CCCC foo"
 

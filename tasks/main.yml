@@ -21,7 +21,7 @@
     update_password: on_create
   loop: "{{ host_users }}"
   when: item.name is defined
-  no_log: true
+  no_log: "{{ no_log }}"
 
 
 - name: Add authorized keys
@@ -30,5 +30,5 @@
     state: present
     key: "{{ item.1 }}"
   loop: "{{ query('subelements', host_users, 'authorized_keys', skip_missing=True) }}"
-  when: item.name is defined
-  no_log: true
+  when: item.0.name is defined
+  no_log: "{{ no_log }}"
